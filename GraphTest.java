@@ -29,7 +29,21 @@ class Graph {
 	Graph(){
 		nodes = new ArrayList<Node>();
 	}
-
+	void dfs(Node n){
+		Deque<Node> stack = new ArrayDeque<Node>();
+		stack.push(n);
+		n.marked = true;
+		while(!stack.isEmpty()){
+			Node poped = stack.pop();
+			for(Node cn: poped.adj){
+				if(!cn.marked){
+					stack.push(cn);
+					cn.marked = true;
+				}
+			}
+			System.out.print(poped.data);
+		}
+	}
 	void bfs(Node n){
 		LinkedBlockingQueue<Node> q = new LinkedBlockingQueue<Node>();
 		q.add(n);
@@ -44,6 +58,16 @@ class Graph {
 				}
 			}
 			System.out.print(nd.data);
+		}
+	}
+
+	void dfsR(Node n){
+		n.marked = true;
+		System.out.print(n.data);
+		for(Node nd : n.adj){
+			if(!nd.marked){
+				dfsR(nd);
+			}
 		}
 	}
 
@@ -65,6 +89,6 @@ public class GraphTest {
 		g.conectNode(g.nodes.get(5),g.nodes.get(6));
 		g.conectNode(g.nodes.get(6),g.nodes.get(8));
 		g.conectNode(g.nodes.get(5),g.nodes.get(7));
-		g.bfs(g.nodes.get(3));
+		g.dfsR(g.nodes.get(3));
 	}
 }
