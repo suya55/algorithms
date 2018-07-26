@@ -5,6 +5,7 @@ import java.lang.*;
 import java.io.*;
 
 class KnapsackProblem {
+    static int CNT = 0;
     public static void main (String[] args) {
         Scanner sc = new Scanner(System.in);
         int loop = sc.nextInt();
@@ -15,31 +16,23 @@ class KnapsackProblem {
             int[] weights = new int[itemCount];
             for(int j = 0 ; j < itemCount ; j++){
                 vals[j] = sc.nextInt();
-
             }
             for(int j = 0 ; j < itemCount ; j++){
                 weights[j] = sc.nextInt();
+                
             }
-            HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
-            System.out.println(getKnapsack(itemCount, totalWeight, vals, weights, 0,map));
+            System.out.println(getKnapsack( totalWeight,0, vals, weights, 0));
+            System.out.println("total count :"+CNT);
         }
     }
-    public static int getKnapsack(int itemCount, int w, int[] vals, int weights[], int idx,HashMap<Integer,Integer> map){
-        if(idx >= itemCount) return 0;
-        int v = vals[idx];
-        if(weights[idx] > w) return getKnapsack(itemCount,w,vals,weights,idx+1,map);
-        if(map.containsKey(w)) return map.get(w);
-        if(weights[idx] == w){
-            map.put(w,v);   
-            return v;  
-        } 
-        
-        for(int i = 0; i< itemCount; i++){
-            if(i==idx) continue;
-            v = Math.max(v, v+getKnapsack(itemCount,w-weights[idx],vals,weights,idx+1,map));
+    public static int getKnapsack( int w,int v, int[] vals, int weights[], int idx){
+        CNT++;
+        if(w < 0) return -1;
+        if(w == 0) return v;
+        if(idx < weights.length){
+            return Math.max(getKnapsack(w-weights[idx], v+vals[idx], vals,weights, idx+1),getKnapsack(w, v,vals, weights, idx+1));
+        }else{
+            return v;
         }
-        map.put(w,v);
-        // System.out.println("weight : "+w+","+"value : "+v+", idx:"+idx);
-        return v;
     }
 }
